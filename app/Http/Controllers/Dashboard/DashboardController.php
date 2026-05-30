@@ -15,19 +15,19 @@ class DashboardController extends Controller
     public function index(Request $request, Accommodation $accommodation)
     {
         $data = [];
-        if($request->user()->isPlatformUser()){
+        if ($request->user()->isPlatformUser()) {
             $data = [
-                'total_bookings'  => '',
-                'total_revenue'   => '2344',
-                'occupancy_rate'  => '75%',
+                'total_bookings' => '',
+                'total_revenue' => '2344',
+                'occupancy_rate' => '75%',
                 'rating' => '4.5',
                 'recent_bookings' => '',
-                'partner_hotels'  => '',
-                'active_users'    => '',
+                'partner_hotels' => '',
+                'active_users' => '',
             ];
-        }else{
+        } else {
             $user_id = $request->user()->isHotelOwner() ? $request->user()->id : $request->user()->current_owner_id;
-            
+
             $bookings = Booking::query()
                 ->join('accommodations', 'bookings.hotel_id', '=', 'accommodations.id')
                 ->join('users', 'users.id', '=', 'bookings.user_id')
@@ -45,10 +45,10 @@ class DashboardController extends Controller
                     'bookings.id',
                     'accommodations.created_at as accommodation_created_at'
                 );
-                
-            $booking_count   = $bookings->count(); // More efficient than get()->count()
+
+            $booking_count = $bookings->count(); // More efficient than get()->count()
             $recent_bookings = $bookings->latest('bookings.created_at')->take(5)->get()->toArray();
-            
+
             $data = [
                 'booking_count' => $booking_count,
                 'monthly_revenue' => '2344',
@@ -57,6 +57,7 @@ class DashboardController extends Controller
                 'recent_bookings' => $recent_bookings,
             ];
         }
+
         return view('dashboard.index', compact('data'));
     }
 

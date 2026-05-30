@@ -5,45 +5,49 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Jobs\sendMailOTPJob;
 use App\Models\User;
 use App\Supports\OTPGenerate;
 use Carbon\Carbon;
 use Error;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    use OTPGenerate;
     use AuthorizesRequests;
+    use OTPGenerate;
 
     public $auth;
+
     public $businessInformation;
+
     public $businessOwner;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->auth = app(\App\Actions\UserAction::class);
         $this->businessInformation = app(\App\Actions\BusinessInformationAction::class);
         $this->businessOwner = app(\App\Actions\BusinessOwnerAction::class);
     }
 
-    public function showRegisterForm(){
+    public function showRegisterForm()
+    {
         return view('auth.register');
     }
 
     public function register(SignUpRequest $request)
     {
         DB::beginTransaction();
-       try{
+        try {
             $user = $this->auth->create([
                 ...$request->validated(),
-                'user_type'=> User::TYPE_HOTEL_USER,
-                'role'     => User::HOTEL_OWNER,
-                'status'   => User::STATUS_DRAFT
+                'user_type' => User::TYPE_HOTEL_USER,
+                'role' => User::HOTEL_OWNER,
+                'status' => User::STATUS_DRAFT,
             ]);
             $this->businessInformation->createWithNullInformation([
                 'business_owner_id' => $user->id,
@@ -52,26 +56,29 @@ class AuthController extends Controller
                 'user_id' => $user->id,
             ]);
             Auth::login($user);
-            if(config('help.dev_mode.enabled')){
+            if (config('help.dev_mode.enabled')) {
                 $user->update([
-                    'email_verified_at'=> Carbon::now(),
-                    'verififed_via'    => User::VERIFY_VIA_EMAIL,
+                    'email_verified_at' => Carbon::now(),
+                    'verififed_via' => User::VERIFY_VIA_EMAIL,
                 ]);
-                DB::commit();     
-                return redirect()->route('dashboard.index');           
-            }else{
+                DB::commit();
+
+                return redirect()->route('dashboard.index');
+            } else {
                 $otp_code = $this->generateOTP(6, true);
-                sendMailOTPJob::dispatch($user->email, "Sir/Madam",  $otp_code);
+                sendMailOTPJob::dispatch($user->email, 'Sir/Madam', $otp_code);
                 $user->update([
                     'otp' => $otp_code,
-                    'otp_expired' => Carbon::now()->addMinutes(5),]);
+                    'otp_expired' => Carbon::now()->addMinutes(5), ]);
                 DB::commit();
+
                 return redirect()->route('verify');
             }
-       }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
+
             return redirect()->route('');
-       }
+        }
     }
 
     public function verifyEmail()
@@ -81,46 +88,51 @@ class AuthController extends Controller
 
     public function verifyEmailOTP(Request $request)
     {
-        try{
-            $codes = collect(range(1, 6))->mapWithKeys(fn($i) => ["code_$i" => 'required|numeric']);
+        try {
+            $codes = collect(range(1, 6))->mapWithKeys(fn ($i) => ["code_$i" => 'required|numeric']);
             $request->validate($codes->toArray());
-            $otp  = collect(range(1, 6))->map(fn($i) => $request->input("code_$i"))->implode('');
+            $otp = collect(range(1, 6))->map(fn ($i) => $request->input("code_$i"))->implode('');
             $user = $request->user();
             $existingOTP = $user->otp;
-            if(!$existingOTP) return redirect()->route('verify');
-            if($existingOTP !=$otp){
+            if (! $existingOTP) {
+                return redirect()->route('verify');
+            }
+            if ($existingOTP != $otp) {
                 return redirect()->back()->withErrors(['code' => 'Oops! That OTP doesn’t match. Please try again']);
             }
-            if($user->otp_expired < now()){
+            if ($user->otp_expired < now()) {
                 return redirect()->back()->withErrors(['code' => 'The OTP has expired. Please request a new one.']);
             }
             $user->update([
-                'email_verified_at'=> Carbon::now(),
-                'verififed_via'    => User::VERIFY_VIA_EMAIL,
+                'email_verified_at' => Carbon::now(),
+                'verififed_via' => User::VERIFY_VIA_EMAIL,
             ]);
+
             return redirect()->route('dashboard.index');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->back()->withErrors(['code' => 'Oops! Something wnet wrong!']);
         }
     }
 
     public function resendOTP(Request $request)
     {
-        try{
-            if(!$request->user()) throw new Error("Failed to send the OTP code!");
+        try {
+            if (! $request->user()) {
+                throw new Error('Failed to send the OTP code!');
+            }
             $otp = $this->generateOTP(6, true);
-            sendMailOTPJob::dispatch($request->user()->email, "Sir/Madam",  $otp);
+            sendMailOTPJob::dispatch($request->user()->email, 'Sir/Madam', $otp);
             $request->user()->update([
                 'otp' => $otp,
                 'otp_expired' => Carbon::now()->addMinutes(5),
             ]);
+
             return back()->with('success', 'OTP code has been resend!');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return back()->withErrors(['code' => 'Failed to send the OTP code!']);
         }
-        
-    }
 
+    }
 
     public function showLoginForm()
     {
@@ -131,20 +143,20 @@ class AuthController extends Controller
     {
         if (Auth::attempt($request->validated())) {
             $request->session()->regenerate();
+
             return redirect()->route('dashboard.index');
         }
         throw ValidationException::withMessages([
-            'email' => 'The provided credentials do not match our records'
+            'email' => 'The provided credentials do not match our records',
         ]);
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
-   
 }
-    
-

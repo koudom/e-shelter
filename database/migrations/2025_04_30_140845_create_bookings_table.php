@@ -16,19 +16,19 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('hotel_id')->constrained('accommodations');
             $table->string('room_id')->nullable();
-            
+
             $table->date('check_in');
             $table->date('check_out');
             $table->unsignedInteger('adults')->default(1);
             $table->unsignedInteger('children')->default(0);
-            
+
             $table->decimal('total_price', 10, 2);
             $table->string('currency', 3)->default('USD');
             $table->string('status')->default('pending');
             $table->string('payment_status')->default('unpaid');
             $table->string('booking_reference')->unique();
             $table->text('special_requests')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
 

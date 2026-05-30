@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
@@ -28,7 +28,7 @@ class Booking extends Model
         'status',
         'payment_status',
         'booking_reference',
-        'special_requests'
+        'special_requests',
     ];
 
     /**
@@ -42,12 +42,16 @@ class Booking extends Model
         'total_price' => 'decimal:2',
     ];
 
-    // constant 
-    const CANCEL_BOOKING='cancel';
-    const COMPLETED_BOOKING ='completed';
-    const PENDING_BOOKING='pending';
-    const CONFIRMED_BOOKING='confirmed';
-    const NO_SHOW_BOOKING='no_show';
+    // constant
+    const CANCEL_BOOKING = 'cancel';
+
+    const COMPLETED_BOOKING = 'completed';
+
+    const PENDING_BOOKING = 'pending';
+
+    const CONFIRMED_BOOKING = 'confirmed';
+
+    const NO_SHOW_BOOKING = 'no_show';
 
     public function user(): BelongsTo
     {
@@ -64,7 +68,7 @@ class Booking extends Model
         return $this->belongsTo(RoomType::class);
     }
 
-    //scope query
+    // scope query
     public function scopeConfirmed($query)
     {
         return $query->where('status', 'confirmed');
@@ -75,10 +79,10 @@ class Booking extends Model
         return $query->whereNotIn('status', ['cancelled', 'completed']);
     }
 
-    //boolean
+    // boolean
     public function isCancellable(): bool
     {
-        return !in_array($this->status, ['cancelled', 'completed', 'no_show']) 
+        return ! in_array($this->status, ['cancelled', 'completed', 'no_show'])
             && $this->check_in > now();
     }
 }

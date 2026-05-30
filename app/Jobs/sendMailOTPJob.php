@@ -15,7 +15,9 @@ class sendMailOTPJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $email;
+
     public $hotelOwner;
+
     public $otp;
 
     public function __construct($email, $hotelOwner, $otp)

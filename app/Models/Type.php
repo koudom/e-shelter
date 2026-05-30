@@ -10,12 +10,12 @@ class Type extends Model
     use HasFactory;
 
     protected $table = 'types';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-
     protected $fillable = [
         'name',
         'description',

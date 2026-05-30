@@ -14,16 +14,16 @@ class SwichLanguageController extends Controller
         $request->validate([
             'lang' => 'required|in:en,km',
         ]);
-        if(count($request->all()) > 2){
-            return redirect()->back()->withErrors("Not Allow");
+        if (count($request->all()) > 2) {
+            return redirect()->back()->withErrors('Not Allow');
         }
-        $lang = $request->input('lang');     
+        $lang = $request->input('lang');
         if (in_array($lang, ['en', 'km'])) {
             Session::put('locale', $lang);
             App::setLocale($lang);
         }
+
         return redirect()->back();
-        
+
     }
 }
-

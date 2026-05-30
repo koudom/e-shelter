@@ -4,20 +4,20 @@ namespace App\Supports;
 
 trait ApiResponse
 {
-
-    public function success($data, $message = null, $code = 200, $with_cookie=false)
+    public function success($data, $message = null, $code = 200, $with_cookie = false)
     {
-        if($with_cookie){
+        if ($with_cookie) {
             return response()->json([
                 'status' => 'success',
                 'message' => $message,
-                'data' => $data
+                'data' => $data,
             ], $code)->cookie('token', $data['token'], 60, '/', null, true, true, false);
         }
+
         return response()->json([
             'status' => 'success',
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ], $code);
     }
 
@@ -25,7 +25,7 @@ trait ApiResponse
     {
         return response()->json([
             'status' => 'error',
-            'message' => $message
+            'message' => $message,
         ], $code);
     }
 
@@ -48,8 +48,4 @@ trait ApiResponse
     {
         return $this->error($message, 500);
     }
-
 }
-    
-
-

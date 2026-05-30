@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class RoomFeaturesController extends Controller
 {
-      /**
+    /**
      * Display a listing of the resource.
      */
     public function index()

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Services\PayWayService;
@@ -11,7 +12,7 @@ class PaymentController extends Controller
     public function create(Request $request)
     {
         $orderData = [
-            'order_id' => 'ORDER_' . time(),
+            'order_id' => 'ORDER_'.time(),
             'amount' => $request->amount,
             'currency' => 'USD',
             'customer_name' => $request->customer_name,
@@ -20,10 +21,10 @@ class PaymentController extends Controller
 
         $result = $this->payWayService->createPayment($orderData);
 
-         if ($result['success'] && isset($result['payment_html'])) {
+        if ($result['success'] && isset($result['payment_html'])) {
             return response($result['payment_html']);
         }
-    
+
         if (isset($result['payment_url'])) {
             return redirect($result['payment_url']);
         }
@@ -34,11 +35,11 @@ class PaymentController extends Controller
     public function return(Request $request)
     {
         $status = $request->input('status');
-        
+
         if ($status === 'success') {
             return view('payment.success');
         }
-        
+
         return view('payment.failed');
     }
 }

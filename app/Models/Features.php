@@ -22,6 +22,6 @@ class Features extends Model
         'icon',
         'type',
         'status',
-        'accommodation_id'
+        'accommodation_id',
     ];
 }

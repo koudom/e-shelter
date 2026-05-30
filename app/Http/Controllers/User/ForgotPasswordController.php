@@ -1,15 +1,16 @@
 <?php
+
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OtpMail;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Mail\OtpMail;
 
 class ForgotPasswordController extends Controller
 {
@@ -29,7 +30,7 @@ class ForgotPasswordController extends Controller
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ], [
-            'email.exists' => 'No account found with this email address.'
+            'email.exists' => 'No account found with this email address.',
         ]);
 
         $token = Str::random(64);
@@ -41,7 +42,7 @@ class ForgotPasswordController extends Controller
             'email' => $request->email,
             'token' => $token,
             'otp' => $otp,
-            'created_at' => Carbon::now()
+            'created_at' => Carbon::now(),
         ]);
 
         // Send OTP via email
@@ -57,12 +58,12 @@ class ForgotPasswordController extends Controller
     public function showOtpForm($token)
     {
         $resetRecord = DB::table('password_resets')->where('token', $token)->first();
-        
-        if (!$resetRecord) {
+
+        if (! $resetRecord) {
             return redirect()->route('password.request')
                 ->with('error', 'Invalid password reset link or link has expired.');
         }
-        
+
         return view('auth.verify-otp', ['token' => $token]);
     }
 
@@ -81,7 +82,7 @@ class ForgotPasswordController extends Controller
             ->where('otp', $request->otp)
             ->first();
 
-        if (!$resetRecord) {
+        if (! $resetRecord) {
             return back()->with('error', 'Invalid OTP.');
         }
 
@@ -100,12 +101,12 @@ class ForgotPasswordController extends Controller
     public function showResetForm($token)
     {
         $resetRecord = DB::table('password_resets')->where('token', $token)->first();
-        
-        if (!$resetRecord) {
+
+        if (! $resetRecord) {
             return redirect()->route('password.request')
                 ->with('error', 'Invalid password reset link or link has expired.');
         }
-        
+
         return view('auth.reset-password', ['token' => $token, 'email' => $resetRecord->email]);
     }
 
@@ -125,7 +126,7 @@ class ForgotPasswordController extends Controller
             ->where('email', $request->email)
             ->first();
 
-        if (!$resetRecord) {
+        if (! $resetRecord) {
             return redirect()->route('password.request')
                 ->with('error', 'Invalid token or email.');
         }
@@ -141,4 +142,3 @@ class ForgotPasswordController extends Controller
             ->with('status', 'Your password has been reset successfully!');
     }
 }
-

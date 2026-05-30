@@ -17,21 +17,27 @@ class Content extends Model
         'meta_title',
         'meta_description',
         'is_active',
-        'order'
+        'order',
     ];
 
     protected $casts = [
         'content_data' => 'array',
         'is_active' => 'boolean',
-        'order' => 'integer'
+        'order' => 'integer',
     ];
 
     const TYPE_BENEFITS = 'benefits';
+
     const TYPE_FAQ = 'faq';
+
     const TYPE_FEATURES = 'features';
+
     const TYPE_HERO = 'hero';
+
     const TYPE_HOST = 'host';
+
     const TYPE_PROVINCE = 'province';
+
     const TYPE_TABS = 'tabs';
 
     public static function getContentTypes()
@@ -43,7 +49,7 @@ class Content extends Model
             self::TYPE_HERO,
             self::TYPE_HOST,
             self::TYPE_PROVINCE,
-            self::TYPE_TABS
+            self::TYPE_TABS,
         ];
     }
 }

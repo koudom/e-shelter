@@ -14,11 +14,15 @@ class BookingController extends Controller
      */
     public function index(Request $request)
     {
-        $accommodations_id = []; 
-        if($request->user()->isHotelOwner()) $accommodations_id = $request->user()->accommodations()->select('id')->get()->toArray();
-        else $accommodations_id = Accommodation::where('business_owner_id', $request->user()->current_owner_id)->select('id')->get()->toArray();
+        $accommodations_id = [];
+        if ($request->user()->isHotelOwner()) {
+            $accommodations_id = $request->user()->accommodations()->select('id')->get()->toArray();
+        } else {
+            $accommodations_id = Accommodation::where('business_owner_id', $request->user()->current_owner_id)->select('id')->get()->toArray();
+        }
         $bookings = Booking::whereIn('hotel_id', $accommodations_id)->paginate(10);
-       return view('booking.index', compact('bookings'));
+
+        return view('booking.index', compact('bookings'));
     }
 
     /**

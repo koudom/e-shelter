@@ -15,9 +15,10 @@ class UserVerifyMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!$request->user()->email_verified_at){
-                return redirect()->route('verify');
-        };
+        if (! $request->user()->email_verified_at) {
+            return redirect()->route('verify');
+        }
+
         return $next($request);
     }
 }

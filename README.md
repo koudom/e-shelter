@@ -1,8 +1,3 @@
-
-
-
-
-```markdown
 # UC E-Shelter
 
 A Laravel-based web application for managing and supporting electronic shelter systems.
@@ -125,6 +120,40 @@ Start the development server:
 ```bash
 npm run dev
 php artisan serve
+```
+
+### 🐳 Run With Docker
+
+This Docker image runs only the Laravel web app. Use an external database such as local PostgreSQL/MySQL, Google Cloud SQL, or another managed database.
+
+Build the image:
+
+```bash
+docker build -t uc-e-shelter .
+```
+
+Run the app with your database settings:
+
+```bash
+docker run --rm -p 8000:8000 \
+  -e APP_KEY=base64:your-generated-app-key \
+  -e APP_ENV=local \
+  -e APP_DEBUG=true \
+  -e DB_CONNECTION=pgsql \
+  -e DB_HOST=host.docker.internal \
+  -e DB_PORT=5432 \
+  -e DB_DATABASE=uc_e_shelter \
+  -e DB_USERNAME=postgres \
+  -e DB_PASSWORD=123 \
+  uc-e-shelter
+```
+
+Then open `http://127.0.0.1:8000`.
+
+Generate an app key on your host if you do not already have one:
+
+```bash
+php artisan key:generate --show
 ```
 
 ---

@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class FeaturesController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request, Accommodation $accommodation)
     {
         $features = \App\Models\Features::where('accommodation_id', '=', $accommodation->id)->paginate(9);
+
         return view('features.index', compact('accommodation', 'features'));
     }
 
@@ -35,15 +36,16 @@ class FeaturesController extends Controller
         Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'image' => ['nullable', 'string'], 
+            'image' => ['nullable', 'string'],
             'icon' => ['nullable', 'string', 'max:255'],
-            'type' => ['required', 'string'], 
+            'type' => ['required', 'string'],
             'status' => ['nullable', 'string'],
         ]);
         $data = $request->only([
-            'name', 'description', 'image', 'icon', 'type', 'status'
+            'name', 'description', 'image', 'icon', 'type', 'status',
         ]);
-        $eatureAction->create([...$data,'accommodation_id'=>$accommodation->id??null]);
+        $eatureAction->create([...$data, 'accommodation_id' => $accommodation->id ?? null]);
+
         return redirect()->route('features.index', $accommodation);
     }
 

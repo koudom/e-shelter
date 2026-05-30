@@ -8,17 +8,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-
 class HotelOwnerMailVerify extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $OTP;
+
     public $ownerName;
+
     public function __construct($OTP, $ownerName)
     {
-       $this->OTP = $OTP;
-       $this->ownerName = $ownerName;
+        $this->OTP = $OTP;
+        $this->ownerName = $ownerName;
     }
 
     /**

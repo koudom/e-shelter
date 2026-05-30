@@ -23,13 +23,14 @@ class FeatureAction
             'status' => $data['status'] ?? 'active',
         ]);
     }
+
     public function update(Features $feature, array $data)
     {
         if (isset($data['image']) && $data['image']) {
             if ($feature->image) {
                 Storage::delete($feature->image);
             }
-            
+
             $data['image'] = $this->storeImage($data['image']);
         }
 
@@ -44,12 +45,13 @@ class FeatureAction
 
         return $feature->fresh();
     }
+
     public function delete(Features $feature)
     {
         if ($feature->image) {
             Storage::delete($feature->image);
         }
-    
+
         return $feature->delete();
     }
 

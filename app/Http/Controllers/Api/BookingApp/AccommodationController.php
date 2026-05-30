@@ -13,7 +13,9 @@ class AccommodationController extends Controller
     use ApiResponse;
 
     public $posts;
+
     public $accommodation;
+
     public function __construct(PostRepository $posts, AccommodationRepository $accommodation)
     {
         $this->posts = $posts;
@@ -31,6 +33,7 @@ class AccommodationController extends Controller
     public function listAccommodations()
     {
         $posts = $this->posts->listPosts()->latest('posts.created_at')->paginate(10);
+
         return $this->success($posts, 'Accommodations retrieved successfully.', 200);
     }
 
@@ -41,13 +44,15 @@ class AccommodationController extends Controller
     {
         // $posts = $this->posts->listPosts()->where('accommodations.star_rating', '>', 1)->paginate(10);
         $posts = $this->posts->listPosts()->where('posts.star_rating', '>', 3)->get();
+
         return $this->success($posts, 'Accommodations retrieved successfully.', 200);
     }
 
     public function accommodation(Request $request, string $id)
     {
-       $accommodation = $this->accommodation->showDetails()->find($id);
-       return $this->success($accommodation, 'Get accommodation successfully!', 200);
+        $accommodation = $this->accommodation->showDetails()->find($id);
+
+        return $this->success($accommodation, 'Get accommodation successfully!', 200);
     }
 
     /**
@@ -60,17 +65,15 @@ class AccommodationController extends Controller
 
     public function searchAccommodation(Request $request)
     {
-       $accommodation = $this->accommodation->showDetails()->find($id);
-       return $this->success($accommodation, 'Get accommodation successfully!', 200);
+        $accommodation = $this->accommodation->showDetails()->find($id);
+
+        return $this->success($accommodation, 'Get accommodation successfully!', 200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-    
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.

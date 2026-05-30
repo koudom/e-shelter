@@ -17,6 +17,6 @@ class RoomFeatures extends Model
      */
     protected $fillable = [
         'room_id',
-        'feature_id'
+        'feature_id',
     ];
 }

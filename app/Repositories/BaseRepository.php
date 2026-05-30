@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BaseRepository
 {
     protected Model $model;
+
     protected Builder $query;
 
     public function __construct(Model $model)
@@ -24,6 +25,7 @@ class BaseRepository
     public function __call($method, $parameters)
     {
         $result = $this->query->$method(...$parameters);
+
         return $result instanceof Builder ? $this : $result;
     }
 }

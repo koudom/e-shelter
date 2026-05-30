@@ -28,13 +28,13 @@ class StoreAccommodationsRequest extends FormRequest
             'city' => 'required|string|max:255',
             'state_province' => 'string|max:255',
             'postal_code' => 'nullable|string|max:20',
-            'country'   => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
             'longitude' => 'nullable|numeric|between:-180,180',
-            'latitude'  => 'nullable|numeric|between:-90,90',
+            'latitude' => 'nullable|numeric|between:-90,90',
             'accommodation_registration_number' => 'nullable|string|max:255',
             'contact_email' => 'nullable|email|max:255',
             'contact_phone' => 'nullable|string|max:20',
-            'description'   => 'nullable|string',
+            'description' => 'nullable|string',
             'amenities' => 'nullable|string',
             'thumbnail_image' => [
                 'nullable',
@@ -45,13 +45,14 @@ class StoreAccommodationsRequest extends FormRequest
         ];
     }
 
-    public function messages(){
-        return[
-            'latitude.between'  => 'Latitude must be between -90 and 90 degrees.',
+    public function messages()
+    {
+        return [
+            'latitude.between' => 'Latitude must be between -90 and 90 degrees.',
             'longitude.between' => 'Longitude must be between -180 and 180 degrees.',
             'star_rating.between' => 'Star rating must be between 1 and 5.',
             'thumbnail_image.dimensions' => 'The image dimensions must not exceed 800x400 pixels.',
-            'check_in_time.date_format'  => 'Check-in time must be in HH:MM format.',
+            'check_in_time.date_format' => 'Check-in time must be in HH:MM format.',
             'check_out_time.date_format' => 'Check-out time must be in HH:MM format.',
         ];
     }

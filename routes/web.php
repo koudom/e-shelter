@@ -15,10 +15,10 @@ use App\Http\Controllers\Mediation\UserFeedBackController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Room\RoomController;
 use App\Http\Controllers\Room\RoomTypeController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\AuthController;
-use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ForgotPasswordController;
+use App\Http\Controllers\User\UserController;
+use Illuminate\Support\Facades\Route;
 
 // Authentication
 Route::middleware('locale')->group(function () {
@@ -42,9 +42,9 @@ Route::middleware('locale')->group(function () {
         // Email verification (requires authentication)
         Route::middleware(['auth'])->group(function () {
             Route::middleware(['redirectIfAuthenticated'])->group(function () {
-                Route::get("/verify", [AuthController::class, 'verifyEmail'])->name('verify');
-                Route::post("/verify", [AuthController::class, 'verifyEmailOTP'])->name('verify.otp');
-                Route::post("/resend-otp", [AuthController::class, 'resendOTP'])->name('resendOTP');
+                Route::get('/verify', [AuthController::class, 'verifyEmail'])->name('verify');
+                Route::post('/verify', [AuthController::class, 'verifyEmailOTP'])->name('verify.otp');
+                Route::post('/resend-otp', [AuthController::class, 'resendOTP'])->name('resendOTP');
             });
 
             Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -54,41 +54,41 @@ Route::middleware('locale')->group(function () {
     });
 
     //  dashboard
-    Route::middleware(['auth', 'verified.email'])->group(function (){   
-       
+    Route::middleware(['auth', 'verified.email'])->group(function () {
+
         // dashboard
-       
-        Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard.index');
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
         // users
-        Route::get('/users',[UserController::class, 'index'])->name('users.index');
-        Route::get('/users/search',[UserController::class, 'search'])->name('users.search.index');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/search', [UserController::class, 'search'])->name('users.search.index');
 
-        // guest 
-        Route::get('/guests',[GuestController::class, 'index'])->name('guests.index');
+        // guest
+        Route::get('/guests', [GuestController::class, 'index'])->name('guests.index');
 
-        // booking 
-        Route::get('/booking',[BookingController::class, 'index'])->name('booking.index');
-        Route::get('/booking/{id}',[BookingController::class, 'show'])->name('booking.show');
-        Route::get('/booking/{id}/edit',[BookingController::class, 'show'])->name('booking.edit');
-        Route::get('/booking/{id}/confirm',[BookingController::class, 'show'])->name('booking.confirm');
+        // booking
+        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+        Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
+        Route::get('/booking/{id}/edit', [BookingController::class, 'show'])->name('booking.edit');
+        Route::get('/booking/{id}/confirm', [BookingController::class, 'show'])->name('booking.confirm');
 
-        // billing 
-        Route::get('/billing',[BillingController::class, 'index'])->name('billing.index');
+        // billing
+        Route::get('/billing', [BillingController::class, 'index'])->name('billing.index');
 
-        Route::prefix('accommodation')->group(function (){
-            Route::get('/',[AccommodationsController::class, 'index'])->name('accommodations.index');
-            Route::get('/create',[AccommodationsController::class, 'create'])->name('accommodations.create');
-            Route::post('/store',[AccommodationsController::class, 'store'])->name('accommodations.store');
-            Route::get('/edit/{accommodation}',[AccommodationsController::class, 'edit'])->name('accommodations.edit');
-            Route::put('/{accommodation}',[AccommodationsController::class, 'update'])->name('accommodations.update');
-            Route::delete('/{accommodation}',[AccommodationsController::class, 'destroy'])->name('accommodations.delete');
+        Route::prefix('accommodation')->group(function () {
+            Route::get('/', [AccommodationsController::class, 'index'])->name('accommodations.index');
+            Route::get('/create', [AccommodationsController::class, 'create'])->name('accommodations.create');
+            Route::post('/store', [AccommodationsController::class, 'store'])->name('accommodations.store');
+            Route::get('/edit/{accommodation}', [AccommodationsController::class, 'edit'])->name('accommodations.edit');
+            Route::put('/{accommodation}', [AccommodationsController::class, 'update'])->name('accommodations.update');
+            Route::delete('/{accommodation}', [AccommodationsController::class, 'destroy'])->name('accommodations.delete');
             Route::get('/{accommodation}', [AccommodationsController::class, 'show'])->name('accommodations.show');
 
             Route::prefix('/{accommodation}')->group(function () {
                 Route::resource('rooms', RoomController::class);
                 // room type
-                Route::resource('room-types', RoomTypeController::class);      
+                Route::resource('room-types', RoomTypeController::class);
                 // for feature
                 Route::resource('features', FeaturesController::class);
                 // for post
@@ -96,9 +96,9 @@ Route::middleware('locale')->group(function () {
             });
         });
 
-        // /user-feedback 
-        Route::get('/user-feedback',[UserFeedBackController::class, 'index'])->name('user-feedback.index');
-        
+        // /user-feedback
+        Route::get('/user-feedback', [UserFeedBackController::class, 'index'])->name('user-feedback.index');
+
         // business information
         Route::get('/business-information', [BusinessInformationController::class, 'index'])->name('business-information.index');
     });
@@ -107,30 +107,30 @@ Route::middleware('locale')->group(function () {
     Route::post('lang', [SwichLanguageController::class, 'switchLang'])->name('lang.switch');
 
     // Website Pages
-    Route::get("/", function () {
+    Route::get('/', function () {
         return view('website.home');
     })->name('home');
 
-    Route::get("/service", function () {
+    Route::get('/service', function () {
         return view('website.service');
     })->name('service');
 
-    Route::get("/partner", function () {
+    Route::get('/partner', function () {
         return view('website.partner');
     })->name('partner');
 
-    Route::get("/features", function () {
+    Route::get('/features', function () {
         return view('website.features');
     })->name('features');
 
     // Add FAQ display route
-    Route::get("/faq", [ContentController::class, 'displayFaq'])->name('faq.display');
+    Route::get('/faq', [ContentController::class, 'displayFaq'])->name('faq.display');
 
-    Route::prefix("term-condition")->group(function () {
-        Route::get("hotel-owner", function () {
+    Route::prefix('term-condition')->group(function () {
+        Route::get('hotel-owner', function () {
             return view('website.term-condition.hotel-owner');
         });
-        Route::get("user", function () {
+        Route::get('user', function () {
             return view('website.term-condition.user');
         });
     });
@@ -139,29 +139,28 @@ Route::middleware('locale')->group(function () {
         // Hero Section
         Route::get('/hero', [ContentController::class, 'hero'])->name('contents.hero');
         Route::match(['post', 'put'], '/hero', [ContentController::class, 'storeHero'])->name('contents.hero.store');
-        
+
         // Province Section
         Route::get('/province', [ContentController::class, 'province'])->name('contents.province');
         Route::match(['post', 'put'], '/province', [ContentController::class, 'storeProvince'])->name('contents.province.store');
-        
+
         // Host Section
         Route::get('/host', [ContentController::class, 'host'])->name('contents.host');
         Route::match(['post', 'put'], '/host', [ContentController::class, 'storeHost'])->name('contents.host.store');
-        
+
         // Benefits Section
         Route::get('/benefits', [ContentController::class, 'benefits'])->name('contents.benefits');
         Route::match(['post', 'put'], '/benefits', [ContentController::class, 'storeBenefits'])->name('contents.benefits.store');
-        
+
         // Features Section
         Route::get('/features', [ContentController::class, 'features'])->name('contents.features');
         Route::match(['post', 'put'], '/features', [ContentController::class, 'storeFeatures'])->name('contents.features.store');
-        
+
         // FAQ Section
         Route::get('/faq', [ContentController::class, 'faq'])->name('contents.faq');
         Route::match(['post', 'put'], '/faq', [ContentController::class, 'storeFaq'])->name('contents.faq.store');
     });
 });
-
 
 Route::post('/payment/create', [PaymentController::class, 'create'])->name('payment.create');
 Route::get('/payment/return', [PaymentController::class, 'return'])->name('payment.return');
@@ -178,5 +177,6 @@ Route::get('/payment/display', function () {
     if ($html) {
         return response($html);
     }
+
     return redirect()->route('payment.form');
 })->name('payment.display');

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Content;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
-use function Pest\Laravel\json;
 
 class ContentController extends Controller
 {
@@ -26,6 +24,7 @@ class ContentController extends Controller
     public function hero()
     {
         $content = Content::where('content_type', Content::TYPE_HERO)->first();
+
         return view('contents.hero', compact('content'));
     }
 
@@ -35,6 +34,7 @@ class ContentController extends Controller
     public function province()
     {
         $content = Content::where('content_type', Content::TYPE_PROVINCE)->first();
+
         return view('contents.province', compact('content'));
     }
 
@@ -44,6 +44,7 @@ class ContentController extends Controller
     public function host()
     {
         $content = Content::where('content_type', Content::TYPE_HOST)->first();
+
         return view('contents.host', compact('content'));
     }
 
@@ -53,6 +54,7 @@ class ContentController extends Controller
     public function benefits()
     {
         $content = Content::where('content_type', Content::TYPE_BENEFITS)->first();
+
         return view('contents.benefits', compact('content'));
     }
 
@@ -62,6 +64,7 @@ class ContentController extends Controller
     public function features()
     {
         $content = Content::where('content_type', Content::TYPE_FEATURES)->first();
+
         return view('contents.features', compact('content'));
     }
 
@@ -71,10 +74,9 @@ class ContentController extends Controller
     public function faq()
     {
         $content = Content::where('content_type', Content::TYPE_FAQ)->first();
+
         return view('contents.faq', compact('content'));
     }
-
-
 
     public function storeHero(Request $request)
     {
@@ -123,9 +125,8 @@ class ContentController extends Controller
                 'enable_parallax' => $request->boolean('enable_parallax', false),
                 'text_alignment' => $request->text_alignment,
                 'overlay_opacity' => $request->overlay_opacity,
-            ]
+            ],
         ];
-
 
         if ($request->hasFile('background_image')) {
             $path = $request->file('background_image')->store('hero', 'public');
@@ -141,7 +142,7 @@ class ContentController extends Controller
                 'meta_title' => $request->title,
                 'meta_description' => $request->description,
                 'is_active' => $request->boolean('is_active', true),
-                'order' => 0
+                'order' => 0,
             ]
         );
 
@@ -183,7 +184,7 @@ class ContentController extends Controller
                 'meta_title' => $request->title,
                 'meta_description' => $request->description,
                 'is_active' => $request->boolean('is_active', true),
-                'order' => 0
+                'order' => 0,
             ]
         );
 
@@ -205,7 +206,7 @@ class ContentController extends Controller
             'services.*.icon' => 'required|string',
             'is_active' => 'boolean',
         ])->validate();
-       
+
         $content = Content::updateOrCreate(
             ['content_type' => Content::TYPE_HOST],
             [
@@ -219,9 +220,10 @@ class ContentController extends Controller
                 'meta_title' => $request->title,
                 'meta_description' => $request->description,
                 'is_active' => $request->boolean('is_active', true),
-                'order' => 0
+                'order' => 0,
             ]
         );
+
         return redirect()->route('contents.host')
             ->with('success', 'Host content saved successfully.');
     }
@@ -286,7 +288,7 @@ class ContentController extends Controller
                 'meta_title' => $request->section_title,
                 'meta_description' => 'Benefits for hosts on our platform',
                 'is_active' => $request->boolean('is_active', true),
-                'order' => 0
+                'order' => 0,
             ]
         );
 
@@ -322,7 +324,7 @@ class ContentController extends Controller
                 'meta_title' => $request->title,
                 'meta_description' => $request->description,
                 'is_active' => $request->boolean('is_active', true),
-                'order' => 0
+                'order' => 0,
             ]
         );
 
@@ -343,7 +345,7 @@ class ContentController extends Controller
             'faqs.*.answer' => 'required|string',
             'is_active' => 'boolean',
         ])->validate();
-        
+
         $content = Content::updateOrCreate(
             ['content_type' => Content::TYPE_FAQ],
             [
@@ -357,7 +359,7 @@ class ContentController extends Controller
                 'meta_title' => $request->title,
                 'meta_description' => $request->description,
                 'is_active' => $request->boolean('is_active', true),
-                'order' => 0
+                'order' => 0,
             ]
         );
 

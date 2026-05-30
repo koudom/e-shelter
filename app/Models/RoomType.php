@@ -10,6 +10,7 @@ class RoomType extends Model
     use HasFactory;
 
     protected $table = 'room_types';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,5 +30,4 @@ class RoomType extends Model
     {
         return $this->hasMany(Post::class, 'room_type_id');
     }
-
 }

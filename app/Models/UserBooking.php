@@ -9,19 +9,21 @@ class UserBooking extends Model
 {
     use HasFactory;
 
-    protected $table ='user_bookings';
+    protected $table = 'user_bookings';
 
-    protected $fillable =[
+    protected $fillable = [
         'accommodation_id',
         'user_id',
-        'room_id'
+        'room_id',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function accommodation(){
+    public function accommodation()
+    {
         return $this->belongsTo(Accommodation::class);
     }
 }

@@ -11,7 +11,7 @@ class AccommodationRepository extends BaseRepository
 
     public function __construct()
     {
-        parent::__construct(new Accommodation());
+        parent::__construct(new Accommodation);
     }
 
     public function showDetails()
@@ -25,7 +25,7 @@ class AccommodationRepository extends BaseRepository
                     'description',
                     'pricing as price',
                     'currency',
-                    'image'
+                    'image',
                 ]);
             }])
             ->select([
@@ -43,7 +43,7 @@ class AccommodationRepository extends BaseRepository
                 'star_rating',
                 'check_in_time',
                 'check_out_time',
-                'thumbnail_image'
+                'thumbnail_image',
             ])
             ->where('is_active', true);
     }

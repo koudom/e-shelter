@@ -9,6 +9,7 @@ class AccommodationsType extends Model
     use \Illuminate\Database\Eloquent\Factories\HasFactory;
 
     protected $table = 'accommodations_type';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,5 +19,4 @@ class AccommodationsType extends Model
         'accommodations_id',
         'type_id',
     ];
-
 }

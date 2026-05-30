@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
+use Spatie\Permission\Models\Role;
 
 class RolePermission extends Seeder
 {
@@ -18,7 +17,7 @@ class RolePermission extends Seeder
         $admin = Role::create(['name' => 'writer']);
         $edit_users = Permission::create(['name' => 'edit articles']);
         $admin->givePermissionTo($edit_users);
-        $user  = \App\Models\User::find(5);
+        $user = \App\Models\User::find(5);
         $user->assignRole($admin);
     }
 }

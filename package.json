@@ -3,7 +3,11 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "format": "prettier --write resources/ && php vendor/bin/pint",
+        "format:check": "prettier --check resources/ && php vendor/bin/pint --test",
+        "format:js": "prettier --write resources/",
+        "format:php": "php vendor/bin/pint"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.1.11",
@@ -11,6 +15,7 @@
         "concurrently": "^9.2.1",
         "flowbite": "^3.1.2",
         "laravel-vite-plugin": "^2.0.1",
+        "prettier": "3.8.3",
         "tailwindcss": "^4.1.13",
         "vite": "^7.1.1"
     },

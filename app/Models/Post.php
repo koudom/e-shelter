@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -28,7 +28,7 @@ class Post extends Model
     ];
 
     public function getRouteKeyName(): string
-{
+    {
         return 'slug';
     }
 
@@ -36,7 +36,7 @@ class Post extends Model
     {
         static::creating(function (self $post) {
             if (empty($post->slug)) {
-                $post->slug = Str::slug($post->title) . '-' . Str::random(6);
+                $post->slug = Str::slug($post->title).'-'.Str::random(6);
             }
         });
     }
@@ -63,7 +63,7 @@ class Post extends Model
             $query->whereJsonContains('tags', $tags);
         });
 
-        $query->when($filters['room_type_id'] ?? false, fn($q, $val) => $q->where('room_type_id', $val));
-        $query->when($filters['accommodation_id'] ?? false, fn($q, $val) => $q->where('accommodation_id', $val));
+        $query->when($filters['room_type_id'] ?? false, fn ($q, $val) => $q->where('room_type_id', $val));
+        $query->when($filters['accommodation_id'] ?? false, fn ($q, $val) => $q->where('accommodation_id', $val));
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Accommodations;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
 use App\Models\Accommodation;
+use App\Models\Post;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,12 +14,14 @@ class PostController extends Controller
     public function index(Accommodation $accommodation)
     {
         $posts = Post::with(['accommodation', 'roomType'])->where('accommodation_id', $accommodation->id)->latest()->paginate(10);
+
         return view('posts.index', compact('posts', 'accommodation'));
     }
 
     public function create(Accommodation $accommodation)
     {
         $roomTypes = RoomType::all();
+
         return view('posts.create', compact('accommodation', 'roomTypes'));
     }
 
@@ -36,15 +38,15 @@ class PostController extends Controller
             'img' => 'nullable|image|max:2048',
         ]);
 
-        if (!$data['slug']) {
-            $data['slug'] = Str::slug($data['title']) . '-' . Str::random(5);
+        if (! $data['slug']) {
+            $data['slug'] = Str::slug($data['title']).'-'.Str::random(5);
         }
 
         if ($request->hasFile('img')) {
             $data['img'] = $request->file('img')->store('posts', 'public');
         }
 
-        if (!empty($data['tags'])) {
+        if (! empty($data['tags'])) {
             $data['tags'] = array_map('trim', explode(',', $data['tags']));
         }
 
@@ -56,6 +58,7 @@ class PostController extends Controller
     public function edit(Accommodation $accommodation, Post $post)
     {
         $roomTypes = RoomType::all();
+
         return view('posts.edit', compact('post', 'accommodation', 'roomTypes'));
     }
 
@@ -63,7 +66,7 @@ class PostController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:posts,slug,' . $post->id,
+            'slug' => 'nullable|string|max:255|unique:posts,slug,'.$post->id,
             'description' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',
             'star_rating' => 'nullable|numeric|min:0|max:5',
@@ -72,15 +75,15 @@ class PostController extends Controller
             'img' => 'nullable|image|max:2048',
         ]);
 
-        if (!$data['slug']) {
-            $data['slug'] = Str::slug($data['title']) . '-' . Str::random(5);
+        if (! $data['slug']) {
+            $data['slug'] = Str::slug($data['title']).'-'.Str::random(5);
         }
 
         if ($request->hasFile('img')) {
             $data['img'] = $request->file('img')->store('posts', 'public');
         }
 
-        if (!empty($data['tags'])) {
+        if (! empty($data['tags'])) {
             $data['tags'] = array_map('trim', explode(',', $data['tags']));
         }
 
@@ -92,6 +95,7 @@ class PostController extends Controller
     public function destroy(Accommodation $accommodation, Post $post)
     {
         $post->delete();
+
         return redirect()->route('posts.index', $accommodation)->with('success', 'Post deleted successfully.');
     }
 }

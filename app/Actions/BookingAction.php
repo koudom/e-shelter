@@ -8,12 +8,12 @@ class BookingAction
     {
         return \App\Models\Booking::create([
             'hotel_id' => $data['accommodation_id'],
-            'user_id'  => \Auth::user()->id??1,
-            'room_id'  => $data['room_id']??'',
+            'user_id' => \Auth::user()->id ?? 1,
+            'room_id' => $data['room_id'] ?? '',
             'check_in' => $data['check_in'],
-            'check_out'=> $data['check_out'],
+            'check_out' => $data['check_out'],
             'total_price' => $data['total_price'],
-            'booking_reference' => $data['booking_reference']
+            'booking_reference' => $data['booking_reference'],
 
         ]);
     }
@@ -22,8 +22,8 @@ class BookingAction
     {
         return \App\Models\Booking::update([
             'hotel_id' => $data['accommodation_id'],
-            'user_id' => \Auth::user()->id??1,
-            'room_id' => $data['room_id']??''
+            'user_id' => \Auth::user()->id ?? 1,
+            'room_id' => $data['room_id'] ?? '',
         ]);
     }
 }

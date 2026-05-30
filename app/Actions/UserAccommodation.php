@@ -10,6 +10,7 @@ class UserAccommodation
             'user_id' => $data['user_id'],
             'accommodation_id' => $data['accommodation_id'],
         ]);
+
         return $userAccommodation;
     }
 }

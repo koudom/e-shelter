@@ -10,13 +10,13 @@ class Accommodation extends Model
     use HasFactory;
 
     protected $table = 'accommodations';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-
-     protected $fillable = [
+    protected $fillable = [
         'business_information_id',
         'business_owner_id',
         'accommodation_name',
@@ -34,21 +34,24 @@ class Accommodation extends Model
         'description',
         'amenities',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class, 'business_owner_id');
     }
-    
-    public function rooms(){
+
+    public function rooms()
+    {
         return $this->hasMany(Room::class, 'accommodation_id');
     }
 
-    public function posts(){
+    public function posts()
+    {
         return $this->hasMany(Post::class, 'accommodation_id');
     }
 
-    public function roomTypes(){
-        return $this->hasMany(RoomType::class,'accommodation_id');
+    public function roomTypes()
+    {
+        return $this->hasMany(RoomType::class, 'accommodation_id');
     }
 }

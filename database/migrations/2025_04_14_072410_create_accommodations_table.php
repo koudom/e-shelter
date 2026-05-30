@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('contact_email');
             $table->string('contact_phone');
             $table->text('description')->nullable();
-            $table->text('amenities')->nullable(); 
+            $table->text('amenities')->nullable();
             $table->integer('star_rating')->nullable();
             $table->time('check_in_time')->default('14:00:00');
             $table->time('check_out_time')->default('12:00:00');

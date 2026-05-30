@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticatedMiddleware
 {
@@ -17,9 +16,10 @@ class AuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check() && $request->user()->email_verified_at){
+        if (Auth::check() && $request->user()->email_verified_at) {
             return redirect()->route('dashboard.index');
         }
+
         return $next($request);
     }
 }

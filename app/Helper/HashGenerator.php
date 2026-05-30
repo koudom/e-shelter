@@ -8,5 +8,6 @@ function aba_generate_hash(array $params, string $apiKey): string
         $raw .= "{$key}={$value}&";
     }
     $raw = rtrim($raw, '&');
+
     return hash_hmac('sha256', $raw, $apiKey);
 }

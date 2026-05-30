@@ -15,28 +15,38 @@ class Room extends Model
      *
      * @var array
      */
-
-    protected $fillable =[
+    protected $fillable = [
         'room_number',
         'status',
-        'accommodation_id'
+        'accommodation_id',
 
     ];
+
     // status
     const STATUS_AVAILABLE = 'available';
+
     const STATUS_UNAVAILABLE = 'unavailable';
+
     const STATUS_BOOKED = 'booked';
+
     const STATUS_CLEANING = 'cleaning';
+
     const STATUS_MAINTENANCE = 'maintenance';
+
     const STATUS_CLEANED = 'cleaned';
+
     const STATUS_CHECKED_IN = 'checked_in';
+
     const STATUS_CHECKED_OUT = 'checked_out';
+
     const STATUS_RESERVED = 'reserved';
+
     const STATUS_DAMAGED = 'damaged';
 
-    //relationships
+    // relationships
 
-    public function accommodation(){
+    public function accommodation()
+    {
         return $this->belongsTo(Accommodation::class, 'accommodation_id');
     }
 }

@@ -15,33 +15,35 @@ class UserController extends Controller
     {
         $this->userRepo = app(\App\Repositories\UserRepository::class);
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $status = '';
-        if($request->status=='all' || $request->status=='')$status = [User::STATUS_ACTIVE, User::STATUS_INACTIVE, User::STATUS_DRAFT];
-        else $status = isset($request->status) ? [$request->status] : [User::STATUS_ACTIVE, User::STATUS_INACTIVE];
+        if ($request->status == 'all' || $request->status == '') {
+            $status = [User::STATUS_ACTIVE, User::STATUS_INACTIVE, User::STATUS_DRAFT];
+        } else {
+            $status = isset($request->status) ? [$request->status] : [User::STATUS_ACTIVE, User::STATUS_INACTIVE];
+        }
 
         $query = [
-            'search'=> $request->query('search', ''),
-            'data_start' => $request->data_start??'',
-            'data_end' => $request->data_end??Carbon::now(),
+            'search' => $request->query('search', ''),
+            'data_start' => $request->data_start ?? '',
+            'data_end' => $request->data_end ?? Carbon::now(),
             'status' => $status,
             'order_by' => $request->order_by ?? 'desc',
         ];
         $users = $this->userRepo->filterUser($query)->paginate(8);
+
         return view('users.index', compact('users'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -67,6 +69,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->status = User::STATUS_INACTIVE;
         $user->save();
+
         return view('users.index', compact('users'));
     }
 
@@ -75,11 +78,11 @@ class UserController extends Controller
      */
     public function selfInactivate(Request $request)
     {
-        if($request->user()->status == User::STATUS_INACTIVE) {
+        if ($request->user()->status == User::STATUS_INACTIVE) {
             return redirect()->route('home');
         }
         $request->user()->status = User::STATUS_INACTIVE;
-        return;
+
     }
 
     /**
@@ -87,7 +90,8 @@ class UserController extends Controller
      */
     public function selftDelete(Request $request)
     {
-       $request->user()->delete();
+        $request->user()->delete();
+
         return view();
     }
 
