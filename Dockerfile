@@ -1,4 +1,4 @@
-FROM php:8.3-cli-alpine AS php_base
+FROM php:8.3-fpm-alpine AS php_base
 
 WORKDIR /var/www/html
 
@@ -65,15 +65,35 @@ RUN npm run build
 
 FROM php_base AS app
 
+# Install nginx, supervisor, and envsubst (gettext)
+RUN apk add --no-cache nginx supervisor gettext \
+    && mkdir -p /var/log/nginx /var/log/supervisor /var/run
+
+# Copy application code from vendor stage
 COPY --from=vendor /var/www/html /var/www/html
+
+# Copy built assets
 COPY --from=assets /app/public/build /var/www/html/public/build
 
-RUN mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
-    && ln -snf ../storage/app/public public/storage \
-    && chown -R www-data:www-data storage bootstrap/cache public/storage
+# Set up storage directories, symlink, and permissions
+RUN mkdir -p /var/www/html/storage/app/public \
+              /var/www/html/storage/framework/cache \
+              /var/www/html/storage/framework/sessions \
+              /var/www/html/storage/framework/views \
+              /var/www/html/storage/logs \
+              /var/www/html/bootstrap/cache \
+    && ln -snf ../storage/app/public /var/www/html/public/storage \
+    && chown -R www-data:www-data /var/www/html/storage \
+                                 /var/www/html/bootstrap/cache
 
-USER www-data
+# Copy nginx, PHP-FPM, supervisor, and entrypoint configs
+COPY docker/nginx-default.conf /etc/nginx/templates/default.conf.template
+COPY docker/php-fpm-pool.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/entrypoint.sh /entrypoint.sh
 
-EXPOSE 8000
+RUN chmod +x /entrypoint.sh
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+EXPOSE 80
+
+ENTRYPOINT ["/entrypoint.sh"]
