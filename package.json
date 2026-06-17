@@ -10,7 +10,7 @@
         "format:php": "php vendor/bin/pint"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.1.11",
+        "@tailwindcss/vite": "^4.3.0",
         "axios": "^1.12.2",
         "concurrently": "^9.2.1",
         "flowbite": "^3.1.2",
